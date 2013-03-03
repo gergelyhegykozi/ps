@@ -1,5 +1,5 @@
 /**
- * Page Switcher 0.1.0 - Fancy async page loader with iframe
+ * Page Switcher 0.1.1 - Fancy async page loader with iframe
  * MIT license http://www.opensource.org/licenses/mit-license.php/
  * @author Gergely Hegyközi | Twitter: @leonuh
  */
@@ -10,8 +10,8 @@
     var PS = function(initWrapper) {
         this.init = function(wrapper, firstInit) {
             firstInit = firstInit || false;
-            var iframe, iframeChecker = d.getElementsByName(wrapper.id);
-
+            var iframe, iframeChecker = d.querySelectorAll('[name=' + wrapper.id + ']');
+ 
             if(firstInit) {
                 this.loadingQueue.iframe = true;
             }
@@ -26,7 +26,7 @@
             wrapper.setAttribute('data-ps-private-original-class', (wrapper.getAttribute('data-ps-private-original-class') || wrapper.className) + ' ');
 
             if(!!iframeChecker[0]) {
-                iframe = d.getElementsByName(wrapper.id)[0]; 
+                iframe = d.querySelectorAll('[name=' + wrapper.id + ']')[0]; 
             } else {
                 iframe = d.createElement('iframe');
                 iframe.name = wrapper.id;

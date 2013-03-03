@@ -27,6 +27,9 @@ a:focus {
     color: #006666;
     text-shadow: none;
 }
+.ie .navbar .nav > li > a {
+    top: 0;
+}
 .navbar .nav > li > a.ps-active {
     background: #009999;
     border: 5px solid #fff;
