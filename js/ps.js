@@ -64,9 +64,7 @@
 
                 this.move();                
                 PS.init(this.iframe, this.wrapper);
-                if(!firstInit) {
-                    PS.syncAnchor();
-                }
+                PS.syncAnchor();
             }
         },
 
@@ -88,7 +86,7 @@
                 var renderEvent = d.createEvent('Event');
                 renderEvent.initEvent('ps:render', true, true);
                 this.wrapper.dispatchEvent(renderEvent);
-            }).bind(this), 60);
+            }).bind(this), 100);
         },
 
         //Move content to body
