@@ -1,0 +1,47 @@
+<script src="js/prettify.js"></script>
+<h2>Get started</h2>
+<hr />
+<h3>How to use</h3>
+<p>Everything is based on wrappers (it will generate <strong>iframe</strong> for itself) and you can configure this as your page requires. <strong>id</strong> attribute and <strong>ps-wrapper</strong> class is always required for working. When your page is loaded the anchors what are targeted for current wrapper are getting a <strong>ps-active</strong> class.</p>
+<pre class="prettyprint linenums">
+&lt;div id=&quot;sample&quot; data-ps-autoload=&quot;true&quot; data-ps-src=&quot;default-page.html&quot; class=&quot;ps-wrapper&quot;&gt;&lt;/div&gt;
+</pre>
+<h3>Short API</h3>
+<h4>id (required)</h4>
+<p>Create an instance with that id and generate an iframe for it. You can get access to the content with the url.</p>
+<p>E.g.</p>
+<p>Url: #/wrapper-id » Load content with default src</p>
+<p>Url: #/wrapper-id/source » Load content with source's page body.</p>
+<h4>data-ps-src ('')</h4>
+<p>Default source for this wrapper if the source is not specified from url.</p>
+<h4>data-ps-autoload (false)</h4>
+<p>Load the default src if dom is copied from the iframe (domcontentloaded).</p>
+<h4>data-ps-fixed (true)</h4>
+<p>If the url changes the content can be removed or not.</p>
+<h4>data-ps-animation (slide-down)</h4>
+<p>The animation name which is declared in css (e.g. Demo page)</p>
+<h4>data-ps-duration (1)</h4>
+<p>Animation duration</p>
+<h4>data-ps-inactivate (true)</h4>
+<p>The wrapper get an inactivate class while it is under animation. (For css3 fany loading)</p>
+<h3>Custom events on ps-wrapper</h3>
+<h4>ps:load</h4>
+<p>Triggered when iframe is loaded and animation is executed.</p>
+<h4>ps:render</h4>
+<p>Triggered when content is rendered to the main window.</p>
+<h3>Recommended default styles</h3>
+<pre class="prettyprint linenums">
+.ps-wrapper {
+    -webkit-transition-timing-function: cubic-bezier(1,-0.25,0,1.25);
+    -moz-transition-timing-function: cubic-bezier(1,-0.25,0,1.25);
+    transition-timing-function: cubic-bezier(1,-0.25,0,1.25);
+}
+.ps-wrapper.removed {
+    display: none;
+}
+</pre>
+<hr />
+<script>
+prettyPrint();
+</script>
+

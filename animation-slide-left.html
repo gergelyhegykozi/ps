@@ -1,0 +1,27 @@
+<script src="js/prettify.js"></script>
+<pre class="prettyprint linenums">
+.slide-left.active {
+    opacity: 1;
+    -webkit-transform: translate(0, 0);
+    -moz-transform: translate(0, 0);
+    transform: translate(0, 0);
+}
+.slide-left, .slide-left.inactivate {
+    opacity: 0;
+    -webkit-transform: translate(100%, 0);
+    -moz-transform: translate(100%, 0);
+    transform: translate(100%, 0);
+    -webkit-transition-property:transform, opacity;
+    -moz-transition-property:transform, opacity;
+    transition-property:transform, opacity;
+}
+.ie .slide-left.active {
+    display: block;
+}
+.ie .slide-left, .ie .slide-left.inactivate {
+    display: none;
+}
+</pre>
+<script>
+prettyPrint();
+</script>

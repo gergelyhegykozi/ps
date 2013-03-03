@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!--[if lte IE 9 ]><html lang="en" class="ie"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en"><!--<![endif]-->
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>PS.js</title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" href="css/main.css" />
+        <link rel="stylesheet" href="css/prettify.css" />
+        <link rel="stylesheet" href="css/ps.css" />
+
+        <link rel="prerender" href="nav.html" />
+        <link rel="prerender" href="hero.html" />
+        <link rel="prerender" href="animations.html" />
+    </head>
+    <body>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                <nav role="navigation" id="nav-wrapper" class="ps-wrapper" data-ps-animation="show" data-ps-autoload="true" data-ps-src="nav.html"></nav>
+                <header role="banner" id="hero-wrapper" class="ps-wrapper" data-ps-animation="show" data-ps-autoload="true" data-ps-src="hero.html"></header>
+                <main role="main" id="content" class="ps-wrapper" data-ps-animation="show" data-ps-autoload="true" data-ps-src="animations.html"></main>
+          </div>
+      </div>
+    </div>
+
+    <script src="js/ps.min.js"></script>
+</body>
+</html>
