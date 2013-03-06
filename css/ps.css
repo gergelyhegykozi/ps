@@ -171,3 +171,9 @@ pre.prettyprint {
     -moz-transition-property:opacity;
     transition-property:opacity;
 }
+
+@media screen and (max-width: 1000px) {
+    .row-fluid .animation {
+        width: 100%;
+    }
+}
