@@ -1,5 +1,5 @@
 /**
- * Page Switcher 0.1.2 - Fancy async page loader with iframe
+ * Page Switcher 0.1.3 - Fancy async page loader with iframe
  * MIT license http://www.opensource.org/licenses/mit-license.php/
  * @author Gergely Hegyközi | Twitter: @leonuh
  */
@@ -26,6 +26,7 @@
             wrapper.setAttribute('data-ps-active-context', wrapper.getAttribute('data-ps-active-context') || 'false');
             wrapper.setAttribute('data-ps-private-original-class', (wrapper.getAttribute('data-ps-private-original-class') || wrapper.className) + ' ');
 
+            //Init Iframe
             if(!!iframeChecker[0]) {
                 iframe = d.querySelectorAll('[name=' + wrapper.id + ']')[0]; 
             } else {
@@ -73,6 +74,7 @@
             var animation = wrapper.getAttribute('data-ps-animation'),
                 duration = wrapper.getAttribute('data-ps-duration');
             return {
+                //Init Iframe
                 animation: animation,
                 duration: duration,
                 style: '<style>.' + animation + '.active { -webkit-transition-duration: ' + duration + 's; -moz-transition-duration: ' + duration + 's; transition-duration: ' + duration + 's;}</style>'
@@ -87,6 +89,9 @@
                 var renderEvent = d.createEvent('Event');
                 renderEvent.initEvent('ps:render', true, true);
                 this.wrapper.dispatchEvent(renderEvent);
+
+                //Add anchor behaviors for the new content
+                PS.addAnchorBehavior(this.wrapper);
             }).bind(this), 100);
         },
 
@@ -118,12 +123,12 @@
 
     //Statics
 
-    //Anchor synchronization
+    //Anchor synchronization (class handler)
     PS.syncAnchor = function() {
         var activeClass = 'ps-active',
             targetInstance = PS.instances[PS.currentUrl],
             oldAnchors = d.querySelectorAll('.' + activeClass),
-            activeAnchors = d.querySelectorAll('[href="#/' + this.currentUrl + (!!this.currentSrc ? ('/' + this.currentSrc) : '' ) + '"]');
+            activeAnchors = d.querySelectorAll('[target="' + this.currentUrl + '"]' + (!!this.currentSrc ? '[href="' + this.currentSrc + '"]'  : '' ));
  
         //Set active class
         Array.prototype.forEach.call(activeAnchors, function(anchor) {
@@ -144,6 +149,7 @@
                         
                     });
                     if(activeContext) {
+                        console.log('a')
                         anchor.className = anchor.className.replace(activeClass, '').trim();
                         return false;
                     }
@@ -161,6 +167,16 @@
             anchor.className += ' ' + activeClass;
         });
     };
+    //Add anchor behavior to keep the seo and semantic html
+    PS.addAnchorBehavior = function(wrapper) {           
+        Array.prototype.forEach.call(wrapper.getElementsByClassName('ps-anchor'), function(anchor) {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                w.location.hash = '#/' + e.target.target + '/' + e.target.getAttribute('href');
+            });
+        });
+    };
+
     PS.init = function(iframe, parentWrapper) {
         var render = function() {
                 iframe.addEventListener('load', function() {
@@ -172,6 +188,9 @@
                         PS.currentUrl = PS.currentUrl[1];
                         PS.currentSrc = (PS.currentSrc = w.location.hash.match(/\/.*\/(.*)/)) ? PS.currentSrc[1] : null;
                     }
+
+                    //Add anchor behavior to document
+                    PS.addAnchorBehavior(d);
 
                     //Init from window
                     process();
@@ -230,6 +249,7 @@
 
             iframe.src = PS.currentSrc || target.getAttribute('data-ps-src');
 
+            //Remove elements with class plus add fallback
             if(!!PS.previousUrl) {
                 previousInstance = PS.instances[PS.previousUrl];
                 previousTarget = previousInstance.wrapper;
