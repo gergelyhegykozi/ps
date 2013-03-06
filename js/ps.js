@@ -1,5 +1,5 @@
 /**
- * Page Switcher 0.1.1 - Fancy async page loader with iframe
+ * Page Switcher 0.1.2 - Fancy async page loader with iframe
  * MIT license http://www.opensource.org/licenses/mit-license.php/
  * @author Gergely Hegyközi | Twitter: @leonuh
  */
@@ -18,11 +18,12 @@
 
              //Set defaults
             wrapper.setAttribute('data-ps-src', wrapper.getAttribute('data-ps-src') || '');
-            wrapper.setAttribute('data-ps-autoload', wrapper.getAttribute('data-ps-autoload') || false);
-            wrapper.setAttribute('data-ps-fixed', wrapper.getAttribute('data-ps-fixed') || true);
+            wrapper.setAttribute('data-ps-autoload', wrapper.getAttribute('data-ps-autoload') || 'false');
+            wrapper.setAttribute('data-ps-fixed', wrapper.getAttribute('data-ps-fixed') || 'true');
             wrapper.setAttribute('data-ps-animation', wrapper.getAttribute('data-ps-animation') || 'slide-down');
             wrapper.setAttribute('data-ps-duration', wrapper.getAttribute('data-ps-duration') || '1');
             wrapper.setAttribute('data-ps-inactivate', wrapper.getAttribute('data-ps-inactivate') || 'true');
+            wrapper.setAttribute('data-ps-active-context', wrapper.getAttribute('data-ps-active-context') || 'false');
             wrapper.setAttribute('data-ps-private-original-class', (wrapper.getAttribute('data-ps-private-original-class') || wrapper.className) + ' ');
 
             if(!!iframeChecker[0]) {
@@ -116,18 +117,49 @@
     };
 
     //Statics
+
+    //Anchor synchronization
     PS.syncAnchor = function() {
         var activeClass = 'ps-active',
+            targetInstance = PS.instances[PS.currentUrl],
             oldAnchors = d.querySelectorAll('.' + activeClass),
             activeAnchors = d.querySelectorAll('[href="#/' + this.currentUrl + (!!this.currentSrc ? ('/' + this.currentSrc) : '' ) + '"]');
  
-        Array.prototype.forEach.call(oldAnchors, function(anchor) {
-            anchor.className = anchor.className.replace(activeClass, '').trim();
+        //Set active class
+        Array.prototype.forEach.call(activeAnchors, function(anchor) {
+            var parentWrapper = anchor;
+            while((parentWrapper = parentWrapper.parentNode) && !parentWrapper.className.match(/ps-wrapper/));
+ 
+            Array.prototype.forEach.call(oldAnchors, function(anchor) {
+                var parentWrapperOld = anchor,
+                    activeContext = false;
+                while((parentWrapperOld = parentWrapperOld.parentNode) && !parentWrapperOld.className.match(/ps-wrapper/));
+
+                if(!parentWrapperOld.getAttribute('data-ps-active-context').match(/^false$/i)) {
+                    Array.prototype.forEach.call(d.querySelectorAll(parentWrapperOld.getAttribute('data-ps-active-context')), function(anchorContext) {
+                        if(anchorContext === parentWrapper) {                    
+                            activeContext = true;
+                            return false;
+                        }
+                        
+                    });
+                    if(activeContext) {
+                        anchor.className = anchor.className.replace(activeClass, '').trim();
+                        return false;
+                    }
+                } else {
+                    anchor.className = anchor.className.replace(activeClass, '').trim();
+                    return false;
+               
+                }
+            });
+
         });
 
+        //Remove active class
         Array.prototype.forEach.call(activeAnchors, function(anchor) {
             anchor.className += ' ' + activeClass;
-        });       
+        });
     };
     PS.init = function(iframe, parentWrapper) {
         var render = function() {
@@ -141,8 +173,6 @@
                         PS.currentSrc = (PS.currentSrc = w.location.hash.match(/\/.*\/(.*)/)) ? PS.currentSrc[1] : null;
                     }
 
-                    var div = document.createElement('div');
-                    PS.transition = !(div.style.transition || div.style.webkitTransition || div.style.MozTransition || div.style.OTransitionDuration);
                     //Init from window
                     process();
                 });
